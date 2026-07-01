@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOURI — Product Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body style="font-family: &quot;Times New Roman&quot;">
+<div class="shell">
+
+  <!-- ───────────── Sidebar ───────────── -->
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="7" r="2.6" fill="#14130F"/>
+        <path d="M3.4 13 C 3.4 21.2, 20.6 21.2, 20.6 13" stroke="#14130F" stroke-width="2.1" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="wordmark">Nouri</span>
+    </div>
+    <div class="brand-sub">Product Docs · v0.2</div>
+
+    <nav class="toc" id="toc">
+      <div class="toc-group">Product</div>
+      <a href="#overview"><span class="n">01</span> Overview</a>
+      <a href="#loop"><span class="n">02</span> The decision loop</a>
+      <a href="#autonomy"><span class="n">03</span> Autonomy</a>
+      <a href="#personas"><span class="n">04</span> Personas</a>
+      <a href="#connectors"><span class="n">05</span> Connectors &amp; platforms</a>
+
+      <div class="toc-group">Design system</div>
+      <a href="#color"><span class="n">06</span> Color</a>
+      <a href="#type"><span class="n">07</span> Typography</a>
+      <a href="#components"><span class="n">08</span> Components</a>
+      <a href="#voice"><span class="n">09</span> Voice &amp; tone</a>
+
+      <div class="toc-group">Structure</div>
+      <a href="#ia"><span class="n">10</span> Information architecture</a>
+      <a href="#onboarding"><span class="n">11</span> Onboarding flow</a>
+      <a href="#ob-decisions"><span class="n">12</span> Onboarding decisions</a>
+
+      <div class="toc-group">Build</div>
+      <a href="#architecture"><span class="n">13</span> Code architecture</a>
+      <a href="#data"><span class="n">14</span> Data model</a>
+      <a href="#extend"><span class="n">15</span> How to extend</a>
+      <a href="#roadmap"><span class="n">16</span> Roadmap &amp; open questions</a>
+    </nav>
+  </aside>
+
+  <!-- ───────────── Content ───────────── -->
+  <main class="content">
+
+    <header class="doc-hero">
+      <p class="eyebrow">Product Documentation</p>
+      <h1 class="title">Nouri</h1>
+      <p class="lead">An autonomous food agent that senses your day, decides the right meal, and orders it — so the decision is handled before you feel the hunger.</p>
+      <div class="meta">
+        <span class="tag"><span class="dot"></span> Living document</span>
+        <span class="tag">iOS · React prototype</span>
+        <span class="tag">Single-user, agent-led</span>
+        <span class="tag">Updated May 2026</span>
+      </div>
+    </header>
+
+    <!-- 01 OVERVIEW -->
+    <section id="overview">
+      <p class="eyebrow">01 · Product</p>
+      <h2>What NOURI is</h2>
+      <p>NOURI removes a decision most people make three times a day and rarely enjoy making: <em>what to eat</em>. Instead of another menu to browse, NOURI is an <strong>agent</strong> — it holds your context (health, calendar, budget, preferences), reasons about what you need next, and places the order on your existing delivery apps. You move the dial on how much it does without asking.</p>
+
+      <p>The product is built for people for whom eating is a <strong>constraint problem, not a craving problem</strong>: someone recovering from surgery, a type-2 diabetic managing glucose, an endurance athlete hitting macros, a caregiver feeding a parent, an exec eating in the cracks between meetings. For them, "pick a restaurant" is the wrong primitive. "Keep me fed correctly without my attention" is the right one.</p>
+
+      <div class="callout">
+        <div class="ic">◇</div>
+        <div class="body">
+          <span class="lbl">The one-sentence thesis</span>
+          NOURI is the first food app whose success metric is <b>how little you open it</b>. Engagement is a cost, not a goal — the agent earns trust by being right, then asking less.
+        </div>
+      </div>
+
+      <h3>Three product principles</h3>
+      <ul>
+        <li><strong>The agent is the interface.</strong> The UI exists to make the agent's reasoning legible and its autonomy adjustable — not to give you a catalog to shop.</li>
+        <li><strong>Trust is earned in increments.</strong> Users start by approving each order and graduate to silent autonomy as confidence builds. The product never starts fully autonomous.</li>
+        <li><strong>Every decision is explainable.</strong> Each order ships with its reasoning chain, the alternatives considered, and a confidence score. Nothing happens in a black box.</li>
+      </ul>
+    </section>
+
+    <!-- 02 LOOP -->
+    <section id="loop">
+      <p class="eyebrow">02 · Product</p>
+      <h2>The decision loop</h2>
+      <p>Everything the agent does runs on one repeating six-step loop. It's the spine of the product — surfaced literally on the <em>Today</em> "thinking" panel and the <em>Brain</em> screen, and replayed as a calibration animation at the end of onboarding.</p>
+
+      <div class="loop">
+        <div class="node"><div class="num">01</div><div class="nm">Sense</div><div class="sub">context signals</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="num">02</div><div class="nm">Reason</div><div class="sub">nutritional need</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="num">03</div><div class="nm">Search</div><div class="sub">scan platforms</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="num">04</div><div class="nm">Select</div><div class="sub">rank candidates</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="num">05</div><div class="nm">Execute</div><div class="sub">place order</div></div>
+        <div class="arrow">→</div>
+        <div class="node"><div class="num">06</div><div class="nm">Learn</div><div class="sub">log + refine</div></div>
+      </div>
+
+      <table class="tbl">
+        <thead><tr><th>Step</th><th>What happens</th><th>Inputs</th></tr></thead>
+        <tbody>
+          <tr><td>Sense</td><td>Reads the moment: time window, location, weather, calendar gaps, macros consumed so far.</td><td class="mono">location, calendar, weather, history</td></tr>
+          <tr><td>Reason</td><td>Computes the gap between targets and intake; derives constraints for this meal.</td><td class="mono">dailyTarget, constraint, CGM</td></tr>
+          <tr><td>Search</td><td>Scans connected delivery platforms for candidates inside the ETA + budget window.</td><td class="mono">platforms, budget</td></tr>
+          <tr><td>Select</td><td>Scores candidates on nutrition × price × ETA × past preference; produces a confidence %.</td><td class="mono">preference signal, allergens</td></tr>
+          <tr><td>Execute</td><td>Places the order via a browser-agent on the platform — gated by the autonomy level.</td><td class="mono">autonomy, payment</td></tr>
+          <tr><td>Learn</td><td>Logs the result to nutrition + spend history and updates preference weights.</td><td class="mono">order outcome, user edits</td></tr>
+        </tbody>
+      </table>
+      <p>Loop timing and narration copy live in <code>LOOP_STEPS</code> and <code>LOOP_NARRATION</code> in <code>data.jsx</code>; the <code>useLoop()</code> hook drives the animated stepper (<code>LoopRibbon</code>).</p>
+    </section>
+
+    <!-- 03 AUTONOMY -->
+    <section id="autonomy">
+      <p class="eyebrow">03 · Product</p>
+      <h2>Autonomy: the trust dial</h2>
+      <p>The single most important control in the product. It governs <em>only the Execute step</em> — how much human confirmation an order needs before it's placed. It is intentionally a four-rung ladder, not a binary on/off, so trust can be handed over gradually.</p>
+
+      <div class="ladder">
+        <div class="rung"><span class="dial">○</span><span class="nm">Suggest</span><span class="ds">NOURI proposes options. You tap to order yourself.</span><span class="tg">You decide</span></div>
+        <div class="rung"><span class="dial">◐</span><span class="nm">Approve</span><span class="ds">NOURI picks one meal. You approve before it places.</span><span class="tg">Confirm each</span></div>
+        <div class="rung"><span class="dial">◑</span><span class="nm">Silent</span><span class="ds">NOURI orders quietly. You get 90 seconds to cancel.</span><span class="tg">90s grace</span></div>
+        <div class="rung"><span class="dial">●</span><span class="nm">Full silent</span><span class="ds">NOURI orders without notifying. Daily digest at 9pm.</span><span class="tg">No interrupts</span></div>
+      </div>
+
+      <div class="callout why">
+        <div class="ic">✶</div>
+        <div class="body">
+          <span class="lbl">Design decision</span>
+          Autonomy is <b>derived from the persona</b> at onboarding (e.g. a diabetic defaults to <em>Approve</em>, an athlete to <em>Silent</em>) but always editable in <em>You → Autonomy</em>. New users never land on <em>Full silent</em> — the agent has to earn it.
+        </div>
+      </div>
+      <p>Defined in <code>AUTONOMY_LEVELS</code> (<code>data.jsx</code>) as an ordered array; the index <em>is</em> the level (0–3), so comparisons like <code>autonomy &gt;= 2</code> mean "silent or above".</p>
+    </section>
+
+    <!-- 04 PERSONAS -->
+    <section id="personas">
+      <p class="eyebrow">04 · Product</p>
+      <h2>Personas as templates</h2>
+      <p>NOURI ships with six pre-modelled situations. They are not demographic segments — they are <strong>constraint templates</strong> that seed a new user's entire profile (targets, default autonomy, recommended connectors, dietary defaults) in one tap, then get fine-tuned. This is the backbone of the quick onboarding: choose the closest situation, adjust from there.</p>
+
+      <table class="tbl">
+        <thead><tr><th>Persona</th><th>Defining constraint</th><th>Default autonomy</th><th>Daily kcal</th></tr></thead>
+        <tbody>
+          <tr><td>Quarantined patient</td><td>Medical compliance above all</td><td class="mono">Full silent</td><td class="mono">1800</td></tr>
+          <tr><td>Type-2 diabetic</td><td>GI ≤ 55, sugars ≤ 8g/meal</td><td class="mono">Approve</td><td class="mono">1900</td></tr>
+          <tr><td>Endurance athlete</td><td>180g P / 320g C / 80g F</td><td class="mono">Silent</td><td class="mono">2800</td></tr>
+          <tr><td>Time-starved exec</td><td>Land food in a free calendar window</td><td class="mono">Silent</td><td class="mono">2100</td></tr>
+          <tr><td>Caregiver</td><td>Soft textures, low sodium, parent's prefs</td><td class="mono">Approve</td><td class="mono">1500</td></tr>
+          <tr><td>Post-surgery</td><td>Day-9 recovery diet, no raw / no spice</td><td class="mono">Approve</td><td class="mono">1700</td></tr>
+        </tbody>
+      </table>
+      <p>Each persona is a record in the <code>PERSONAS</code> map (<code>data.jsx</code>) with <code>autonomyDefault</code>, <code>constraint</code>, <code>dailyTarget</code>, <code>connectors</code>, and a sample <code>meals</code> timeline. See <a href="#data">Data model</a> for the full shape.</p>
+    </section>
+
+    <!-- 05 CONNECTORS -->
+    <section id="connectors">
+      <p class="eyebrow">05 · Product</p>
+      <h2>Connectors &amp; platforms</h2>
+      <p><strong>Connectors</strong> are the agent's senses — the context inputs to the <em>Sense</em> and <em>Reason</em> steps. They're grouped into three families and surfaced both in onboarding (recommended set pre-toggled by persona) and in <em>Brain → Connectors</em>.</p>
+      <div class="grid three">
+        <div class="card"><div class="k">Context</div><h5>Where &amp; when</h5><p>Location, Calendar, Time &amp; weather.</p></div>
+        <div class="card"><div class="k">Health</div><h5>Body signals</h5><p>Wearables, Dietary profile, Medical profile, CGM.</p></div>
+        <div class="card"><div class="k">History</div><h5>Memory</h5><p>Past orders, Budget.</p></div>
+      </div>
+
+      <h3>Delivery platforms (Execute)</h3>
+      <p>Orders are placed by automating real delivery apps rather than via formal partnerships — a deliberate go-to-market choice that lets NOURI work on day one without integration deals.</p>
+      <table class="tbl">
+        <thead><tr><th>Platform</th><th>Method</th><th>Avg latency</th></tr></thead>
+        <tbody>
+          <tr><td>GrabFood</td><td>Browser-agent</td><td class="mono">1.2s</td></tr>
+          <tr><td>Foodpanda</td><td>Browser-agent</td><td class="mono">0.9s</td></tr>
+          <tr><td>Deliveroo</td><td>Unofficial API</td><td class="mono">0.4s</td></tr>
+        </tbody>
+      </table>
+      <p>Defined in <code>CONNECTORS</code> and <code>PLATFORMS</code> (<code>data.jsx</code>). The current build assumes a Singapore market (SGD, local restaurants) — see <a href="#roadmap">Roadmap</a> for localisation notes.</p>
+    </section>
+
+    <!-- 06 COLOR -->
+    <section id="color">
+      <p class="eyebrow">06 · Design system</p>
+      <h2>Color</h2>
+      <p>A warm, low-saturation "bone" system. The base is a paper-like off-white, ink is a near-black warm brown, and two muted accents — <strong>sage</strong> (the agent / positive / on-track) and <strong>clay</strong> (attention / awaiting you) — carry all the meaning. Accents are defined in <code>oklch()</code> so light and dark variants share hue and stay perceptually even.</p>
+      <div class="tokens">
+        <div class="token"><div class="chip" style="background:#F4F2EC"></div><div class="meta"><div class="nm">bg</div><div class="vl">#F4F2EC</div></div></div>
+        <div class="token"><div class="chip" style="background:#FFFFFF"></div><div class="meta"><div class="nm">surface</div><div class="vl">#FFFFFF</div></div></div>
+        <div class="token"><div class="chip" style="background:#FAF8F3"></div><div class="meta"><div class="nm">surface-2</div><div class="vl">#FAF8F3</div></div></div>
+        <div class="token"><div class="chip" style="background:#14130F"></div><div class="meta"><div class="nm">ink</div><div class="vl">#14130F</div></div></div>
+        <div class="token"><div class="chip" style="background:#3D3A33"></div><div class="meta"><div class="nm">ink-2</div><div class="vl">#3D3A33</div></div></div>
+        <div class="token"><div class="chip" style="background:#8A857A"></div><div class="meta"><div class="nm">muted</div><div class="vl">#8A857A</div></div></div>
+        <div class="token"><div class="chip" style="background:oklch(0.58 0.06 162)"></div><div class="meta"><div class="nm">sage</div><div class="vl">oklch(.58 .06 162)</div></div></div>
+        <div class="token"><div class="chip" style="background:oklch(0.66 0.11 50)"></div><div class="meta"><div class="nm">clay</div><div class="vl">oklch(.66 .11 50)</div></div></div>
+        <div class="token"><div class="chip" style="background:oklch(0.58 0.16 28)"></div><div class="meta"><div class="nm">danger</div><div class="vl">oklch(.58 .16 28)</div></div></div>
+      </div>
+      <div class="callout why">
+        <div class="ic">✶</div>
+        <div class="body"><span class="lbl">Semantic rule</span> Sage = the agent is working / on target. Clay = something needs you. Ink = primary actions &amp; en-route. Never introduce a third accent for a new state — re-use sage/clay or a neutral pill.</div>
+      </div>
+      <p>Full token set (incl. a complete dark theme) lives in the <code>:root</code> / <code>[data-theme="dark"]</code> blocks of <code>nouri/NOURI.html</code>. Dark mode is a live tweak.</p>
+    </section>
+
+    <!-- 07 TYPE -->
+    <section id="type">
+      <p class="eyebrow">07 · Design system</p>
+      <h2>Typography</h2>
+      <p>Three families, each with one job. The pairing is what gives NOURI its calm, editorial-but-technical character.</p>
+      <div class="card specimen">
+        <div class="row"><span class="lbl">Instrument Serif</span><span class="serif" style="font-size:30px;color:var(--ink)">Eat well without deciding.</span></div>
+        <div class="row"><span class="lbl">Geist</span><span style="font-size:18px;color:var(--ink-2)">Body, UI labels, controls — the working text.</span></div>
+        <div class="row"><span class="lbl">Geist Mono</span><span class="mono" style="font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Eyebrows · data · timestamps</span></div>
+      </div>
+      <table class="tbl">
+        <thead><tr><th>Family</th><th>Used for</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Instrument Serif</td><td>Big titles, hero numbers, dish names</td><td>Often italic for the wordmark; large sizes only — never body.</td></tr>
+          <tr><td>Geist</td><td>All UI text, buttons, descriptions</td><td>Weights 400–600. The default <code>font-family</code>.</td></tr>
+          <tr><td>Geist Mono</td><td>Eyebrows, metadata, kcal/price, status</td><td>Uppercase + letter-spacing for labels; <code>tnum</code> for figures.</td></tr>
+        </tbody>
+      </table>
+      <p>Helper classes <code>.serif</code>, <code>.mono</code>, <code>.tnum</code> (tabular figures) are defined globally. On 1080-tall phone screens, body text floors at ~12–14px; titles run 22–52px.</p>
+    </section>
+
+    <!-- 08 COMPONENTS -->
+    <section id="components">
+      <p class="eyebrow">08 · Design system</p>
+      <h2>Components</h2>
+      <p>The shared vocabulary. App primitives live in <code>screens.jsx</code>; onboarding adds its own setup-assistant kit in <code>ob-kit.jsx</code>. Both export to <code>window</code> so any script can use them.</p>
+      <h4>App primitives — screens.jsx</h4>
+      <div class="grid two">
+        <div class="card"><h5>Pill</h5><p>Status chip. Tones: <code>neutral · sage · clay · ink · ghost</code>.</p></div>
+        <div class="card"><h5>Icon</h5><p>Single stroked icon set (1.6px), 24-grid. Includes allergen glyphs.</p></div>
+        <div class="card"><h5>BrandMark</h5><p>Disk-in-bowl logo + optional italic wordmark.</p></div>
+        <div class="card"><h5>LoopRibbon</h5><p>The six-step decision loop as an animated stepper.</p></div>
+        <div class="card"><h5>FoodImage</h5><p>Deterministic top-down dish art generated from the dish name (<code>foodart.jsx</code>).</p></div>
+        <div class="card"><h5>MealSheet</h5><p>Bottom sheet: review → placing → confirmed order flow.</p></div>
+      </div>
+      <h4>Onboarding kit — ob-kit.jsx</h4>
+      <div class="grid two">
+        <div class="card"><h5>ObFrame</h5><p>Setup chrome: back + progress header, scroll body, pinned footer.</p></div>
+        <div class="card"><h5>ObOtp</h5><p>Code input — <code>boxed</code> or <code>underline</code>, auto-advance + paste.</p></div>
+        <div class="card"><h5>ObField / ObStepper / ObSwitch</h5><p>Text field, ± numeric stepper, toggle.</p></div>
+        <div class="card"><h5>ObSelectCard / ObSegment</h5><p>Selectable persona card; segmented control.</p></div>
+        <div class="card"><h5>ObHero / ObFeature</h5><p>Tinted glyph tile; icon · title · description row.</p></div>
+        <div class="card"><h5>ObProgress</h5><p>Thin five-segment step indicator.</p></div>
+      </div>
+    </section>
+
+    <!-- 09 VOICE -->
+    <section id="voice">
+      <p class="eyebrow">09 · Design system</p>
+      <h2>Voice &amp; tone</h2>
+      <p>Calm, editorial, and quietly confident — the voice of a competent assistant who has already handled it. It reassures without being soft, and explains without lecturing.</p>
+      <div class="grid two">
+        <div class="card"><div class="k">Do</div><p>"Eat well without deciding." · "NOURI is ready." · "We've switched on the sources recommended for you."</p></div>
+        <div class="card"><div class="k">Don't</div><p>Exclamation marks, hype, emoji as decoration, gamified streaks, "Yay! 🎉", urgency tactics.</p></div>
+      </div>
+      <ul>
+        <li>Lead with the outcome, then the mechanism: <em>"the decision is handled before you feel the hunger."</em></li>
+        <li>Name the agent as a calm third party ("NOURI picks…", "NOURI hard-blocks…").</li>
+        <li>Numbers are reassurance, not pressure — show the reasoning, never a countdown to FOMO.</li>
+      </ul>
+    </section>
+
+    <!-- 10 IA -->
+    <section id="ia">
+      <p class="eyebrow">10 · Structure</p>
+      <h2>Information architecture</h2>
+      <p>A new account passes through the <strong>onboarding gate</strong> before the tab bar is ever reachable. After setup, the app is four tabs plus modal sheets and sub-pages.</p>
+      <table class="tbl">
+        <thead><tr><th>Surface</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Onboarding (gate)</td><td>Verify account, build profile, set up the agent. Blocks the tabs until complete.</td></tr>
+          <tr><td>Today</td><td>The hero. The "now" panel (thinking / awaiting / tracking / idle) + today's meal timeline.</td></tr>
+          <tr><td>Brain</td><td>The agent's mind: live loop, connectors, delivery platforms.</td></tr>
+          <tr><td>Log</td><td>Nutrition + spend history, agent-decision stats. Opens a spend detail sub-page.</td></tr>
+          <tr><td>You</td><td>Persona, autonomy dial, daily targets, payment &amp; restrictions. Opens the allergies sub-page.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <div class="ic">▦</div>
+        <div class="body"><span class="lbl">Mental model</span> <b>Today</b> = what's happening · <b>Brain</b> = why &amp; how · <b>Log</b> = what happened · <b>You</b> = the rules. Onboarding is where the rules are first written.</div>
+      </div>
+    </section>
+
+    <!-- 11 ONBOARDING -->
+    <section id="onboarding">
+      <p class="eyebrow">11 · Structure</p>
+      <h2>Onboarding flow</h2>
+      <p>An Apple-style setup assistant: one decision per screen, smart defaults, a pinned primary action, and a thin five-step progress bar across the core. It's deliberately quick — the persona template pre-fills most of it, so the later screens are mostly confirmations. The dark beads below are <strong>required</strong>; the rest carry persona defaults you can skip past.</p>
+
+      <div class="flow">
+        <div class="fstep"><div class="rail"><div class="bead">W</div><div class="line"></div></div><div class="fbody"><div class="ft">Welcome</div><div class="fd">Brand intro + value prop. Two variants: editorial statement or feature rows.</div></div></div>
+        <div class="fstep req"><div class="rail"><div class="bead">1</div><div class="line"></div></div><div class="fbody"><div class="ft">Verify <span class="mini">Required</span></div><div class="fd">Choose phone or email, enter it, then a 6-digit OTP. The only hard gate.</div></div></div>
+        <div class="fstep"><div class="rail"><div class="bead">2</div><div class="line"></div></div><div class="fbody"><div class="ft">Situation</div><div class="fd">Pick the closest persona. Loads it as a template for everything after.</div></div></div>
+        <div class="fstep"><div class="rail"><div class="bead">3</div><div class="line"></div></div><div class="fbody"><div class="ft">Profile</div><div class="fd">Name, allergies &amp; avoids, daily macro targets — all prefilled, all editable.</div></div></div>
+        <div class="fstep"><div class="rail"><div class="bead">4</div><div class="line"></div></div><div class="fbody"><div class="ft">Connect</div><div class="fd">Data sources, with the persona's recommended set already switched on.</div></div></div>
+        <div class="fstep"><div class="rail"><div class="bead">5</div><div class="line"></div></div><div class="fbody"><div class="ft">Payment</div><div class="fd">Mock card + daily spend cap. "I'll add this later" is allowed.</div></div></div>
+        <div class="fstep"><div class="rail"><div class="bead">✓</div></div><div class="fbody"><div class="ft">Ready</div><div class="fd">A short "calibrating" loop animation, a setup summary, then handoff into the app.</div></div></div>
+      </div>
+
+      <p>On completion the flow calls <code>onComplete({ personaId, autonomy, profile, connectors, payment })</code>; the app applies the persona + autonomy as tweaks, stores the name for the greeting, and switches the view to <em>Today</em>. The flow controller is <code>OnboardingFlow</code> in <code>onboarding.jsx</code>; each screen is its own component in the same file.</p>
+    </section>
+
+    <!-- 12 OB DECISIONS -->
+    <section id="ob-decisions">
+      <p class="eyebrow">12 · Structure</p>
+      <h2>Onboarding — design decisions</h2>
+      <p>The reasoning behind the choices, so future changes don't accidentally undo them.</p>
+
+      <h3>Why persona-first, profile-second</h3>
+      <p>Asking a new user to set macro targets and dietary rules cold is high-friction and error-prone. Leading with a <em>situation</em> they recognise ("post-surgery", "athlete") lets one tap seed sensible targets, autonomy, dietary defaults, and recommended connectors. Every later screen then opens pre-filled — the user <em>edits</em> rather than <em>authors</em>. This is what keeps a 7-screen flow feeling "quick".</p>
+
+      <h3>Why verification is the only hard gate</h3>
+      <p>NOURI will spend the user's money autonomously, so a verified contact is non-negotiable — it's the security root and the channel for approvals/digests. Everything else (profile, connectors, payment) can be deferred or changed later, so only Verify blocks progress. Channel is user's choice (phone <em>or</em> email) to avoid forcing a number on privacy-sensitive users.</p>
+
+      <div class="callout why">
+        <div class="ic">✶</div>
+        <div class="body"><span class="lbl">OTP UX details that matter</span> Six auto-advancing cells with paste support &amp; backspace-to-previous; masked destination echo (<code>+65 •••• 4567</code>); a 30-second resend countdown; auto-verify on the sixth digit with a verifying → verified transition; and a "wrong details? change" escape hatch. These are the difference between a code screen that feels native and one that feels like a form.</div>
+      </div>
+
+      <h3>Variants exposed as tweaks</h3>
+      <p>Two directions were left adjustable rather than decided, so they can be A/B'd or chosen by feel:</p>
+      <table class="tbl">
+        <thead><tr><th>Tweak</th><th>Options</th><th>Default</th></tr></thead>
+        <tbody>
+          <tr><td>Welcome style</td><td class="mono">features · editorial</td><td class="mono">features</td></tr>
+          <tr><td>OTP style</td><td class="mono">boxed · underline</td><td class="mono">boxed</td></tr>
+          <tr><td>Verify by</td><td class="mono">choice · phone · email</td><td class="mono">choice</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Gate behavior</h3>
+      <p>For review, the prototype starts at onboarding on every load. <strong>Replay onboarding</strong> in the Tweaks panel resets the flow at any time (it remounts via an incrementing <code>obKey</code>). In production this becomes a persisted "onboarded" flag with the gate skipped on return.</p>
+
+      <div class="callout">
+        <div class="ic">⚠</div>
+        <div class="body"><span class="lbl">Known mock</span> The OTP accepts <b>any six digits</b> and payment fields are non-functional placeholders. These are the two seams where a real backend plugs in — see <a href="#extend">How to extend</a>.</div>
+      </div>
+
+      <h3>A small robustness note</h3>
+      <p>Onboarding titles use <code>white-space: nowrap</code>. The phone frame is a fixed 402px wide, so titles never need to wrap — pinning them to one line avoids a web-font reflow artifact (a title measured at one line but painted at two would overlap the body). Keep new titles short enough to fit ~354px of content width.</p>
+    </section>
+
+    <!-- 13 ARCHITECTURE -->
+    <section id="architecture">
+      <p class="eyebrow">13 · Build</p>
+      <h2>Code architecture</h2>
+      <p>A single-page React prototype, transpiled in-browser with Babel. No build step. <code>nouri/NOURI.html</code> is the shell — it defines design tokens, loads fonts, declares tweak defaults, and pulls in the scripts <strong>in dependency order</strong>.</p>
+
+      <div class="filemap">
+        <div class="frow"><span class="fn">NOURI.html</span><span class="fr">Shell: tokens, fonts, keyframes, tweak defaults, script order.</span><span class="badge">shell</span></div>
+        <div class="frow"><span class="fn">ios-frame.jsx</span><span class="fr">iOS 26 device bezel, status bar, keyboard, glass pills.</span><span class="badge">chrome</span></div>
+        <div class="frow"><span class="fn">tweaks-panel.jsx</span><span class="fr"><code>useTweaks()</code> + the Tweaks panel controls &amp; host protocol.</span><span class="badge">chrome</span></div>
+        <div class="frow"><span class="fn">data.jsx</span><span class="fr">Domain data: personas, autonomy, loop steps, connectors, platforms.</span><span class="badge">data</span></div>
+        <div class="frow"><span class="fn">foodart.jsx</span><span class="fr">Deterministic dish art + platform card.</span><span class="badge">data</span></div>
+        <div class="frow"><span class="fn">screens.jsx</span><span class="fr">App primitives + the four tab screens + sheets/sub-pages.</span><span class="badge">app</span></div>
+        <div class="frow"><span class="fn">ob-kit.jsx</span><span class="fr">Onboarding UI kit (frame, fields, OTP, stepper…).</span><span class="badge new">new</span></div>
+        <div class="frow"><span class="fn">onboarding.jsx</span><span class="fr">Onboarding step screens + <code>OnboardingFlow</code> controller.</span><span class="badge new">new</span></div>
+        <div class="frow"><span class="fn">app.jsx</span><span class="fr">Root: the gate, tab/sheet state, scaling, Tweaks wiring.</span><span class="badge">app</span></div>
+      </div>
+
+      <h4>The cross-file scope rule</h4>
+      <p>Each <code>&lt;script type="text/babel"&gt;</code> gets its own scope. To share a component or data object across files, assign it to <code>window</code> at the end of the file:</p>
+      <pre><code><span class="c">// end of ob-kit.jsx — makes these global to later scripts</span>
+Object.assign(window, {
+  ObFrame, ObOtp, ObField, ObStepper, ObSwitch,
+  ObSelectCard, OB_ALLERGENS, OB_PERSONA_META,
+});</code></pre>
+      <div class="callout">
+        <div class="ic">⚠</div>
+        <div class="body"><span class="lbl">Gotcha</span> Never name a module-level style object <code>const styles = {…}</code> — two files doing that collide and break. Prefix per-file (<code>obPrimaryBtn</code>, <code>btnGhost</code>) or use inline styles.</div>
+      </div>
+
+      <h4>Rendering &amp; scaling</h4>
+      <p><code>app.jsx</code> renders a fixed <code>402 × 874</code> phone and scales it to the viewport with a CSS <code>transform</code>. The gate is a simple view switch inside the device:</p>
+      <pre><code><span class="k">const</span> [view, setView] = useState(<span class="s">'onboarding'</span>); <span class="c">// | 'app'</span>
+<span class="c">// inside &lt;IOSDevice&gt;:</span>
+view === <span class="s">'onboarding'</span>
+  ? &lt;<span class="p">OnboardingFlow</span> key={obKey} onComplete={finishOnboarding} …/&gt;
+  : &lt;<span class="c">/* TopBar + tabs + BottomNav */</span>/&gt;</code></pre>
+    </section>
+
+    <!-- 14 DATA -->
+    <section id="data">
+      <p class="eyebrow">14 · Build</p>
+      <h2>Data model</h2>
+      <p>All domain data is plain objects in <code>data.jsx</code>. The shapes you'll touch most:</p>
+
+      <span class="filename">PERSONAS[id]</span>
+      <pre><code>{
+  id, name, full, blurb,
+  autonomyDefault,            <span class="c">// 0–3, seeds the dial</span>
+  accent: <span class="s">'sage'</span> | <span class="s">'clay'</span>,
+  connectors: [<span class="s">'medical'</span>, <span class="s">'dietary'</span>, …],  <span class="c">// recommended</span>
+  constraint: <span class="s">'Day 9 of post-op diet…'</span>,
+  dailyTarget: { kcal, p, c, f },
+  meals: [Meal, …]            <span class="c">// sample day timeline</span>
+}</code></pre>
+
+      <span class="filename">Meal</span>
+      <pre><code>{
+  time: <span class="s">'12:30'</span>, slot: <span class="s">'Lunch'</span>,
+  item, from,                 <span class="c">// null until decided</span>
+  kcal, price,
+  status: <span class="s">'delivered'</span>|<span class="s">'enroute'</span>|<span class="s">'awaiting'</span>|<span class="s">'scheduled'</span>,
+  eta | decideAt,             <span class="c">// depending on status</span>
+  why: <span class="s">'32g lean protein for tissue repair…'</span>
+}</code></pre>
+
+      <span class="filename">Onboarding collected state (onboarding.jsx)</span>
+      <pre><code>{
+  channel: <span class="s">'phone'</span>|<span class="s">'email'</span>, cc, phone, email,
+  personaId,
+  profile: {
+    name,
+    allergens: { shellfish: <span class="k">true</span>, … },   <span class="c">// id → bool</span>
+    targets: { kcal, p, c, f }
+  },
+  connectors: { calendar: <span class="k">true</span>, … },        <span class="c">// id → bool</span>
+  payment: { card, exp, cvc, name, cap }
+}</code></pre>
+      <p>Other exports: <code>AUTONOMY_LEVELS</code> (ordered 0–3), <code>LOOP_STEPS</code> + <code>LOOP_NARRATION</code>, <code>CONNECTORS</code> (with <code>group</code>), <code>PLATFORMS</code>. Tweak defaults (persona, autonomy, theme, welcomeStyle, otpStyle, verifyChannel) live in the <code>EDITMODE</code> block in <code>NOURI.html</code>.</p>
+    </section>
+
+    <!-- 15 EXTEND -->
+    <section id="extend">
+      <p class="eyebrow">15 · Build</p>
+      <h2>How to extend</h2>
+
+      <h3>Add an onboarding step</h3>
+      <ol>
+        <li>Build the screen component in <code>onboarding.jsx</code> using <code>ObFrame</code> (pass <code>progress</code>, <code>total</code>, <code>onBack</code>, and a footer button).</li>
+        <li>Add a <code>case</code> for it in the <code>OnboardingFlow</code> stage <code>switch</code>, wiring <code>onBack</code> / <code>onContinue</code> to the neighbouring stages.</li>
+        <li>If it should count on the progress bar, add its id to the <code>OB_CORE</code> array and renumber the <code>progress</code> props.</li>
+      </ol>
+
+      <h3>Add a persona</h3>
+      <p>Add a record to <code>PERSONAS</code> and its id to <code>PERSONA_LIST</code> in <code>data.jsx</code>, then give it a glyph + accent in <code>OB_PERSONA_META</code> (<code>ob-kit.jsx</code>). It appears automatically in onboarding and the persona tweak.</p>
+
+      <h3>Add a new tab / screen</h3>
+      <p>Write the screen in <code>screens.jsx</code> (export it on <code>window</code>), add a tab to the <code>tabs</code> array in <code>BottomNav</code> (<code>app.jsx</code>), and render it in the tab switch. Use an <code>Icon k="…"</code> that exists in the icon set.</p>
+
+      <h3>Add a tweak</h3>
+      <p>Add the key + default to the <code>EDITMODE</code> block in <code>NOURI.html</code>, then drop a control (<code>TweakRadio</code>, <code>TweakSelect</code>, <code>TweakSlider</code>…) into the <code>TweaksPanel</code> in <code>app.jsx</code>, reading <code>t.key</code> and calling <code>setTweak('key', v)</code>.</p>
+
+      <h3>Wire the real seams</h3>
+      <table class="tbl">
+        <thead><tr><th>Mock today</th><th>Where</th><th>Becomes</th></tr></thead>
+        <tbody>
+          <tr><td>OTP accepts any code</td><td class="mono">OtpStep.runVerify</td><td>Send-code + verify API; surface the <code>error</code> status on failure.</td></tr>
+          <tr><td>Payment fields</td><td class="mono">PaymentStep</td><td>Tokenised card capture (Stripe/Adyen); store only a token.</td></tr>
+          <tr><td>Meals are static</td><td class="mono">PERSONAS[].meals</td><td>Live agent output from the Search/Select steps.</td></tr>
+          <tr><td>Platform "browser-agent"</td><td class="mono">PLATFORMS</td><td>Real automation/integration per delivery service.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 16 ROADMAP -->
+    <section id="roadmap">
+      <p class="eyebrow">16 · Build</p>
+      <h2>Roadmap &amp; open questions</h2>
+      <h3>Deliberately deferred</h3>
+      <ul>
+        <li><strong>Sign-in for returning users.</strong> "I already have an account" currently routes to the same verify step — a real auth path (and the persisted onboarded flag) is the next gate work.</li>
+        <li><strong>Multi-profile (caregiver).</strong> The caregiver persona implies two eaters; the data model is still single-profile.</li>
+        <li><strong>Localisation.</strong> Hard-coded to SGD + Singapore restaurants and a <code>+65</code> default. Currency, market, and platform list need to be market-driven.</li>
+        <li><strong>Notifications &amp; the 9pm digest.</strong> Implied by autonomy levels 2–3 but not built.</li>
+      </ul>
+      <h3>Open questions worth resolving</h3>
+      <ul>
+        <li>Should autonomy be per-meal-type (e.g. silent for breakfast, approve for dinner) rather than global?</li>
+        <li>How does the agent handle a <em>rejected</em> order — re-search, ask, or hold? The "Train: less like this" affordance hints at it but the loop-back isn't modelled.</li>
+        <li>Where does grocery / cooking fit, if at all — or is NOURI strictly delivery?</li>
+        <li>What's the trust-building moment that earns an upgrade from Approve → Silent, and should the app prompt it?</li>
+      </ul>
+
+      <hr>
+      <div class="foot">
+        <p>This document mirrors the prototype in <code>nouri/NOURI.html</code>. It's meant to be edited as the product evolves — keep the design decisions sections honest about <em>why</em>, not just <em>what</em>.</p>
+        <p class="mono">NOURI · Product Documentation · v0.2 · May 2026</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Scrollspy: highlight the TOC entry for the section in view.
+  (function () {
+    const links = [...document.querySelectorAll('.toc a')];
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    const sections = [...document.querySelectorAll('section[id]')];
+    let active = null;
+    const setActive = (id) => {
+      if (id === active) return;
+      active = id;
+      links.forEach(a => a.classList.remove('active'));
+      const a = map.get(id);
+      if (a) a.classList.add('active');
+    };
+    const obs = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    }, { rootMargin: '-8% 0px -70% 0px', threshold: 0 });
+    sections.forEach(s => obs.observe(s));
+    // smooth-scroll handled by CSS; set active immediately on click
+    links.forEach(a => a.addEventListener('click', () => setActive(a.getAttribute('href').slice(1))));
+  })();
+</script>
+</body>
+</html>

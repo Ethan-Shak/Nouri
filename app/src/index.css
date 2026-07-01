@@ -1,0 +1,109 @@
+:root {
+  --bg: #F4F2EC;
+  --surface: #FFFFFF;
+  --surface-2: #FAF8F3;
+  --ink: #14130F;
+  --ink-2: #3D3A33;
+  --muted: #8A857A;
+  --hairline: rgba(20,19,15,0.08);
+  --hairline-2: rgba(20,19,15,0.05);
+  --sage: oklch(0.58 0.06 162);
+  --sage-soft: oklch(0.94 0.025 162);
+  --clay: oklch(0.66 0.11 50);
+  --clay-soft: oklch(0.95 0.04 60);
+  --danger: oklch(0.58 0.16 28);
+  --shadow: 0 1px 2px rgba(20,19,15,0.04), 0 8px 24px rgba(20,19,15,0.04);
+}
+
+[data-theme="dark"] {
+  --bg: #0E0E10;
+  --surface: #18181B;
+  --surface-2: #1F1F23;
+  --ink: #F2EFE8;
+  --ink-2: #C7C2B8;
+  --muted: #7A7670;
+  --hairline: rgba(242,239,232,0.08);
+  --hairline-2: rgba(242,239,232,0.04);
+  --sage: oklch(0.72 0.07 162);
+  --sage-soft: oklch(0.28 0.04 162);
+  --clay: oklch(0.74 0.1 55);
+  --clay-soft: oklch(0.3 0.05 55);
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Geist', -apple-system, system-ui, sans-serif;
+  background: #DCD8CE;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+[data-theme="dark"] body, body.dark-stage {
+  background: #050506;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.5), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,200,150,0.18), transparent 60%),
+    #DCD8CE;
+}
+
+body[data-stage-dark="1"] #root {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(50,50,55,0.6), transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(80,60,40,0.15), transparent 60%),
+    #050506;
+}
+
+/* hide scrollbars inside the phone */
+.scroll::-webkit-scrollbar { display: none; }
+.scroll { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* utility */
+.mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+.serif { font-family: 'Instrument Serif', Georgia, serif; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.4); opacity: 0.55; }
+}
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scrim {
+  from { background: rgba(0,0,0,0); }
+  to { background: rgba(0,0,0,0.45); }
+}
+@keyframes subpage-in {
+  from { transform: translateX(8%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes ob-push {
+  from { transform: translateX(14px); }
+  to   { transform: translateX(0); }
+}

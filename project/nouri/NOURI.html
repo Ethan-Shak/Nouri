@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOURI — autonomous food agent</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F4F2EC;
+    --surface: #FFFFFF;
+    --surface-2: #FAF8F3;
+    --ink: #14130F;
+    --ink-2: #3D3A33;
+    --muted: #8A857A;
+    --hairline: rgba(20,19,15,0.08);
+    --hairline-2: rgba(20,19,15,0.05);
+    --sage: oklch(0.58 0.06 162);
+    --sage-soft: oklch(0.94 0.025 162);
+    --clay: oklch(0.66 0.11 50);
+    --clay-soft: oklch(0.95 0.04 60);
+    --danger: oklch(0.58 0.16 28);
+    --shadow: 0 1px 2px rgba(20,19,15,0.04), 0 8px 24px rgba(20,19,15,0.04);
+  }
+  [data-theme="dark"] {
+    --bg: #0E0E10;
+    --surface: #18181B;
+    --surface-2: #1F1F23;
+    --ink: #F2EFE8;
+    --ink-2: #C7C2B8;
+    --muted: #7A7670;
+    --hairline: rgba(242,239,232,0.08);
+    --hairline-2: rgba(242,239,232,0.04);
+    --sage: oklch(0.72 0.07 162);
+    --sage-soft: oklch(0.28 0.04 162);
+    --clay: oklch(0.74 0.1 55);
+    --clay-soft: oklch(0.3 0.05 55);
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.35);
+  }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: 'Geist', -apple-system, system-ui, sans-serif;
+    background: #DCD8CE;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  [data-theme="dark"] body, body.dark-stage {
+    background: #050506;
+  }
+  #stage {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.5), transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(255,200,150,0.18), transparent 60%),
+      #DCD8CE;
+  }
+  body[data-stage-dark="1"] #stage {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(50,50,55,0.6), transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(80,60,40,0.15), transparent 60%),
+      #050506;
+  }
+  /* hide scrollbars inside the phone */
+  .scroll::-webkit-scrollbar { display: none; }
+  .scroll { scrollbar-width: none; -ms-overflow-style: none; }
+
+  /* utility */
+  .mono { font-family: 'Geist Mono', ui-monospace, monospace; }
+  .serif { font-family: 'Instrument Serif', Georgia, serif; }
+  .tnum { font-variant-numeric: tabular-nums; }
+
+  @keyframes pulse-dot {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.55; }
+  }
+  @keyframes ring-spin {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes slide-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scrim {
+    from { background: rgba(0,0,0,0); }
+    to { background: rgba(0,0,0,0.45); }
+  }
+  @keyframes subpage-in {
+    from { transform: translateX(8%); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+  /* entrance for onboarding screens — transform only, so content is never
+     hidden if the animation clock is paused/throttled */
+  @keyframes ob-push {
+    from { transform: translateX(14px); }
+    to   { transform: translateX(0); }
+  }
+</style>
+
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" fill="#14130F"/>
+    <text x="50" y="58" font-family="Georgia,serif" font-style="italic" font-size="22" fill="#F2EFE8" text-anchor="middle">N</text>
+    <circle cx="50" cy="50" r="32" fill="none" stroke="#7AA690" stroke-width="1.2" stroke-dasharray="2 4"/>
+  </svg>
+</template>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+</head>
+<body style="background-color: rgb(232, 195, 102)">
+<div id="stage"></div>
+
+<script>
+  /* Tweak defaults — host parses & rewrites this block */
+  window.NOURI_TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "persona": "post_surgery",
+    "autonomy": 1,
+    "hour": 12,
+    "theme": "light",
+    "welcomeStyle": "editorial",
+    "otpStyle": "boxed",
+    "verifyChannel": "choice"
+  }/*EDITMODE-END*/;
+</script>
+
+<script type="text/babel" src="ios-frame.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="foodart.jsx"></script>
+<script type="text/babel" src="screens.jsx"></script>
+<script type="text/babel" src="ob-kit.jsx"></script>
+<script type="text/babel" src="onboarding.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+
+</body>
+</html>
