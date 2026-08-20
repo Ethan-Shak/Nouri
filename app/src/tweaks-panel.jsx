@@ -110,8 +110,20 @@ const __TWEAKS_STYLE = `
     filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
 `
 
-export function useTweaks(defaults) {
-  const [values, setValues] = React.useState(defaults)
+export function useTweaks(defaults, storageKey) {
+  const [values, setValues] = React.useState(() => {
+    if (storageKey) {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey))
+        if (saved && typeof saved === 'object') return { ...defaults, ...saved }
+      } catch { /* corrupt or unavailable storage — fall back to defaults */ }
+    }
+    return defaults
+  })
+  React.useEffect(() => {
+    if (!storageKey) return
+    try { localStorage.setItem(storageKey, JSON.stringify(values)) } catch { /* ignore */ }
+  }, [values, storageKey])
   const setTweak = React.useCallback((keyOrEdits, val) => {
     const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
       ? keyOrEdits : { [keyOrEdits]: val }

@@ -80,26 +80,35 @@ const BottomNav = ({ tab, setTab }) => {
 }
 
 export default function App() {
-  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS)
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS, 'nouri.tweaks')
 
   const [tab, setTab] = useState('today')
   const [sheet, setSheet] = useState(null)
   const [subpage, setSubpage] = useState(null)
 
-  const [view, setView] = useState('onboarding')
+  const [view, setView] = useState(() =>
+    localStorage.getItem('nouri.onboarded') ? 'app' : 'onboarding')
   const [obKey, setObKey] = useState(0)
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState(() => localStorage.getItem('nouri.userName') || '')
 
   const finishOnboarding = ({ personaId, autonomy, profile }) => {
     if (personaId) {
       setTweak('persona', personaId)
       setTweak('autonomy', autonomy)
     }
-    if (profile?.name) setUserName(profile.name)
+    if (profile?.name) {
+      setUserName(profile.name)
+      localStorage.setItem('nouri.userName', profile.name)
+    }
+    localStorage.setItem('nouri.onboarded', '1')
     setTab('today')
     setView('app')
   }
-  const replayOnboarding = () => { setObKey(k => k + 1); setView('onboarding') }
+  const replayOnboarding = () => {
+    localStorage.removeItem('nouri.onboarded')
+    setObKey(k => k + 1)
+    setView('onboarding')
+  }
 
   const persona = PERSONAS[t.persona] || PERSONAS.quarantined
   const autonomy = t.autonomy

@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+
+# Build output
+app/dist/
+
+# Vite cache
+.vite/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
